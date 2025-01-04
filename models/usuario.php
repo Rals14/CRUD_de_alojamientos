@@ -1,5 +1,4 @@
 <?php
-
     class usuario{
         public $id;
         public $correo;
@@ -42,7 +41,24 @@
             $sentence = $this->connection->prepare($query);
             $sentence->bindParam(':correo', $correo);
             $sentence->execute();
-            return $sentence->fetch(PDO::FETCH_ASSOC);
+            $row = $sentence->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                $this->id = $row['id'];
+                $this->correo = $row['correo'];
+                $this->contrasena = $row['contrasena'];
+                $this->rol = $row['rol'];
+                return $this;
+            } else {
+                return null;
+            }
+        }
+
+        public function seleccionarAlojamiento($alojamiento_id) {
+            $query = "INSERT INTO usuarios_alojamientos (usuario_id, alojamiento_id) VALUES (:usuario_id, :alojamiento_id)";
+            $sentence = $this->connection->prepare($query);
+            $sentence->bindParam(':usuario_id', $this->id);
+            $sentence->bindParam(':alojamiento_id', $alojamiento_id);
+            return $sentence->execute();
         }
 
     }
