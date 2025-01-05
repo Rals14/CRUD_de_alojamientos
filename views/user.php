@@ -14,28 +14,44 @@
       <?php
       
       require_once './controller/AlojamientoController.php';
-      $controler = new AlojamientoController();
-      $alojamientos=$controler->read();
-      
-      if (isset($_GET['id'])) {
-        $id = intval($_GET['id']); 
-        if ($controler->eliminate($id)) {
-            echo "<div class='alert alert-success'>Alojamiento eliminado correctamente.</div>";
-        } else {
-            echo "<div class='alert alert-danger'>Error al eliminar el alojamiento.</div>";
+      require_once './controller/UsuarioController.php';
+      $alojamientoController = new AlojamientoController();
+      $alojamientos=$alojamientoController->read();
+      $usuarioController = new UsuarioController();
+      $usuarioActual = $usuarioController->buscarPorId($_SESSION['usuario_id']);
+
+      if($_SERVER['REQUEST_METHOD'] == "POST"){
+        if($_POST['action'] == "agregar"){
+          $usuarioActual->agregarAlojamiento($_POST['id']);
+        }else if($_POST['action'] == "eliminar"){
+          $usuarioActual->eliminarAlojamiento($_POST['id']);
         }
-    }
+      }
+      
+
     
       foreach($alojamientos as $alojamiento):
       ?>
       <div class="col-sm-6 col-md-4">
         <div class="card h-100 shadow">
           <div class="card-body">
-            <h5 class="card-title fw-bold text-dark"><?php echo $alojamiento['nombre'] ?></h5>
-            <p class="card-text text-muted"><?php echo $alojamiento['descripcion'] ?></p>
-            <p class="text-secondary small">Ubicación: <?php echo $alojamiento['ubicacion'] ?></p>
-            <p class="text-success fs-5 fw-bold">Precio: $<?php echo $alojamiento['precio'] ?></p>
-            <a href="index.php?id=<?php echo $alojamiento['id']; ?>" class="btn btn-warning">Eliminar</a>
+            <h5 class="card-title fw-bold text-dark"><?php echo $alojamiento->nombre ?></h5>
+            <p class="card-text text-muted"><?php echo $alojamiento->descripcion ?></p>
+            <p class="text-secondary small">Ubicación: <?php echo $alojamiento->ubicacion ?></p>
+            <p class="text-success fs-5 fw-bold">Precio: $<?php echo $alojamiento->precio ?></p>
+            <?php if($alojamiento->tieneRelacion($_SESSION['usuario_id'], $alojamiento->id)): ?>
+                <form method="POST" action="index.php?page=usuario">
+                    <input type="hidden" name="action" value="eliminar">
+                    <input type="hidden" name="id" value="<?php echo $alojamiento->id; ?>">
+                    <button type="submit" class="btn btn-danger">Eliminar</button>
+                </form>
+            <?php else: ?>
+                <form method="POST" action="index.php?page=usuario">
+                    <input type="hidden" name="action" value="agregar">
+                    <input type="hidden" name="id" value="<?php echo $alojamiento->id; ?>">
+                    <button type="submit" class="btn btn-warning">Agregar</button>
+                </form>
+            <?php endif; ?>
           </div>
           
         </div>

@@ -54,6 +54,23 @@
             }
         }
 
+        public function buscarPorId($id) {
+            $query = "SELECT * FROM usuarios WHERE id = :id";
+            $sentence = $this->connection->prepare($query);
+            $sentence->bindParam(':id', $id);
+            $sentence->execute();
+            $row = $sentence->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                $this->id = $row['id'];
+                $this->correo = $row['correo'];
+                $this->contrasena = $row['contrasena'];
+                $this->rol = $row['rol'];
+                return $this;
+            } else {
+                return null;
+            }
+        }
+
         public function agregarAlojamiento($alojamiento_id) {
             if ($this->verificarRelacionExistente($this->id, $alojamiento_id)) {
                 echo "La relación ya existe.\n";

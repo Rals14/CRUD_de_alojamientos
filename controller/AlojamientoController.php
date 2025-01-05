@@ -14,8 +14,22 @@ class AlojamientoController {
 
     public function read() {
         $sentence = $this->alojamiento->read(); 
-        return $sentence->fetchAll(PDO::FETCH_ASSOC); 
+        $rows = $sentence->fetchAll(PDO::FETCH_ASSOC); 
+
+        $alojamientos = [];
+        foreach ($rows as $row) {
+            $alojamiento = new Alojamiento($this->db);
+            $alojamiento->id = $row['id'];
+            $alojamiento->nombre = $row['nombre'];
+            $alojamiento->descripcion = $row['descripcion'];
+            $alojamiento->ubicacion = $row['ubicacion'];
+            $alojamiento->precio = $row['precio'];
+            $alojamientos[] = $alojamiento;
+        }
+        return $alojamientos;
+        
     }
+
     public function eliminate($id){
         return $this->alojamiento->eliminate($id);
     }
@@ -30,4 +44,6 @@ class AlojamientoController {
             $this->alojamiento->create();
         }
     }
+
+    
 }
