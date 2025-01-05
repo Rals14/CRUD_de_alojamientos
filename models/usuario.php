@@ -8,7 +8,6 @@
         public $connection;
         public $table_name = "usuarios";
     
-
         public function __construct($db){
             $this->connection = $db;
         }
