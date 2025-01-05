@@ -1,6 +1,6 @@
 <?php
-require_once './config/database.php';
-require_once './models/usuario.php';
+require_once '../config/database.php';
+require_once '../models/usuario.php';
 
 class UsuarioController
 {
@@ -22,23 +22,34 @@ class UsuarioController
             $correo = str_replace(' ', '', $_POST['correo']);
             $this->usuario->correo = $correo;
             if (!filter_var($this->usuario->correo, FILTER_VALIDATE_EMAIL)) {
-                header("Location: formulario.php?error=correo_invalido");
+                header("Location: register.php?error=correo_invalido");
                 exit;
             }
 
-            header("Location: formulario.php");
+            header("Location: ../index.php");
             $contrasena = $_POST['contrasena'];
             if (strlen($contrasena) < 9) {
-                header("Location: formulario.php?error=contrasena_invalida");
+                header("Location: register.php?error=contrasena_invalida");
                 exit;
             }
             if (!preg_match('/[A-Z]/', $contrasena)) {
-                header("Location: formulario.php?error=contrasena_invalida_sin_mayus");
+                header("Location: register.php?error=contrasena_invalida_sin_mayus");
                 exit;
             }
             $this->usuario->contrasena = password_hash($contrasena, PASSWORD_BCRYPT);
             $this->usuario->rol = $_POST['rol'];
             $this->usuario->create();
         }
+    }
+
+    public function agregarAlojamiento($idAlojamiento)
+    {  
+
+        $this->usuario->agregarAlojamiento($idAlojamiento);        
+    }
+
+    public function eliminarAlojamiento($idAlojamiento)
+    {
+        $this->usuario->eliminarAlojamiento($idAlojamiento);
     }
 }

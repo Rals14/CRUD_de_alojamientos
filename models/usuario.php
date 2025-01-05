@@ -54,12 +54,43 @@
             }
         }
 
-        public function seleccionarAlojamiento($alojamiento_id) {
-        $query = "INSERT INTO usuarios_alojamientos (usuario_id, alojamiento_id) VALUES (:usuario_id, :alojamiento_id)";
-        $sentence = $this->connection->prepare($query);
-        $sentence->bindParam(':usuario_id', $this->id);
-        $sentence->bindParam(':alojamiento_id', $alojamiento_id);
-        return $sentence->execute();
+        public function agregarAlojamiento($alojamiento_id) {
+            if ($this->verificarRelacionExistente($this->id, $alojamiento_id)) {
+                echo "La relación ya existe.\n";
+                return false;
+            }
+
+            $query = "INSERT INTO usuarios_alojamientos (usuario_id, alojamiento_id) VALUES (:usuario_id, :alojamiento_id)";
+            $sentence = $this->connection->prepare($query);
+            $sentence->bindParam(':usuario_id', $this->id);
+            $sentence->bindParam(':alojamiento_id', $alojamiento_id);
+            return $sentence->execute();
+        }
+
+        private function verificarRelacionExistente($usuario_id, $alojamiento_id)
+        {
+            $query = "SELECT COUNT(*) FROM usuarios_alojamientos WHERE usuario_id = :usuario_id AND alojamiento_id = :alojamiento_id";
+            $sentence = $this->connection->prepare($query);
+            $sentence->bindParam(':usuario_id', $usuario_id);
+            $sentence->bindParam(':alojamiento_id', $alojamiento_id);
+            $sentence->execute();
+
+            $count = $sentence->fetchColumn();
+            return $count > 0;
+        }
+
+        public function eliminarAlojamiento($alojamiento_id) {
+
+            if (!$this->verificarRelacionExistente($this->id, $alojamiento_id)) {
+                echo "La relación no existe.\n";
+                return false;
+            }
+            
+            $query = "DELETE FROM usuarios_alojamientos WHERE usuario_id = :usuario_id AND alojamiento_id = :alojamiento_id";
+            $sentence = $this->connection->prepare($query);
+            $sentence->bindParam(':usuario_id', $this->id);
+            $sentence->bindParam(':alojamiento_id', $alojamiento_id);
+            return $sentence->execute();
         }
 
     }

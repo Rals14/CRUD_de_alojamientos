@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 require_once './controller/AuthController.php';
 if($_SERVER['REQUEST_METHOD'] === 'POST'){
     $controller = new AuthController();
@@ -14,15 +14,6 @@ if(isset($_GET['salir'])){
 ?>
 <?php
 
-
-if (empty($_SESSION)) {
-    echo "No hay sesión activa.";
-
-}else{
-    echo "<pre>";
-    print_r($_SESSION);
-    echo "</pre>";
-}
 
 
 ?>
@@ -62,8 +53,7 @@ if (empty($_SESSION)) {
                 </div>
             </form>
             <p class="text-center mt-3">
-                ¿No tienes una cuenta? <a href="#">Regístrate</a>
-                <a href="login.php?salir=si">Cerrar Sesión</a>
+                ¿No tienes una cuenta? <a href="./views/register.php">Regístrate</a>
             </p>
         </div>
     </div>
