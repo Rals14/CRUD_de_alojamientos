@@ -44,7 +44,7 @@ if (isset($_GET['error']) && $_GET['error'] === 'correo_invalido') {
                                 <label for="accountType" class="form-label">Tipo de Cuenta</label>
                                 <select class="form-select" id="accountType" name="rol" required>
                                     <option value="" selected disabled>Selecciona una opción</option>
-                                    <option value="alojamientosnombreadministrador">Administrador</option>
+                                    <option value="administrador">Administrador</option>
                                     <option value="usuario">Usuario</option>
                                 </select>
                             </div>
