@@ -1,6 +1,6 @@
 <?php
-require_once '../config/database.php';
-require_once '../models/usuario.php';
+require_once './config/database.php';
+require_once './models/usuario.php';
 
 class UsuarioController
 {
@@ -51,5 +51,9 @@ class UsuarioController
     public function eliminarAlojamiento($idAlojamiento)
     {
         $this->usuario->eliminarAlojamiento($idAlojamiento);
+    }
+
+    public function buscarPorId($id){
+        return $this->usuario->buscarPorId($id);
     }
 }

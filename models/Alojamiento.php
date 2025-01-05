@@ -47,6 +47,20 @@
             return $sentence;
         }
 
+        public function tieneRelacion($userId, $alojamientoId) {
+            $query = "SELECT COUNT(*) as relacion_existe
+                      FROM usuarios_alojamientos
+                      WHERE usuario_id = :userId AND alojamiento_id = :alojamientoId";
+            
+            $sentence = $this->connection->prepare($query);
+            $sentence->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $sentence->bindParam(':alojamientoId', $alojamientoId, PDO::PARAM_INT);
+            $sentence->execute();
+            
+            $result = $sentence->fetch(PDO::FETCH_ASSOC);
+            return $result['relacion_existe'] > 0;
+        }
+
     }
 
 ?>
