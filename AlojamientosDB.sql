@@ -9,7 +9,9 @@ CREATE TABLE usuarios(
 	id INT AUTO_INCREMENT PRIMARY KEY,
 	correo VARCHAR(50) UNIQUE NOT NULL,
     contrasena VARCHAR (255) NOT NULL,
-	rol ENUM('usuario', 'alojamientosnombreadministrador') DEFAULT 'usuario' NOT NULL
+
+	rol ENUM('usuario', 'administrador') DEFAULT 'usuario' NOT NULL
+>>>>>>> Alojamiento-update
 );
 
 CREATE TABLE alojamientos (
